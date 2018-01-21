@@ -1,0 +1,42 @@
+/*PA4 part3 write up
+Author: Qihan Guan A92413483
+  	Duwei Wang A10169673
+*/
+
+**The problem we solved**
+For a given actor, we can find the actor in the database that can be connected to this actor with the fewest movies. In other words, we can find the actor who has the smallest "shortest path" to the  given actor, aka the closest actor. For example, the user inputs actor "BACON, KEVIN (I)". Our program can find the closest actor to "BAVON, KEVIN(I)", and print out the specific path. 
+
+
+
+
+**How to run the program**
+Step1: $make
+Step2: $./extension input.tsv "actor"
+Sample run: ./extension movie_casts.tsv "BACON, KEVIN (I)"
+Sample output: 
+Loading file...
+File loaded.
+Finding actor...
+Closest actor to actor BACON, KEVIN (I) is: ABATEMARCO, TONY, with smallest path length of 1
+The path is: (BACON, KEVIN (I))--[MY ONE AND ONLY#@2009]-->(ABATEMARCO, TONY)
+
+*The input.tsv is the database file that contains all of the actors and movies. You can use movie_casts.tsv. The "actor" is the actor name you want to search for. Make sure you include the double quotation mark.
+*If there are ties such that the input actor has multiple closest actors, only one will be displayed. 
+*If the actor you put in is not in the database, the program will give a warning "The actor name you put in is invalid. Exiting.." and terminates.
+*If the actor you put in is in the database but it is not connected to any other actor, the program will give a warning "No actor is connected by any path to the actor you put in." and terminates.
+
+
+
+**How we solved it**
+In our extension.cpp, we first load the input file into an ActorGraph object. To find the closest actor to the input actor. We first try to find the position of the input actor. If we cannot find it, the program will give warning and exit. Now we have the position index of the input actor, we use a for loop to iterate through all the actors. We call the unweighted find shortest path function during each iteration and then push the traversed actor index and path length pair into a min-heap. When we exit the for loop, we pop out the top element of the min-heap. As we defined our own comparion class to compare the path length, the top element should have the smallest path length. Then we get the actor index with the smallest path length. We call unweighted find shortest path again, with the given actor index and the actor index with the smallest path length to the given actor. Then we display the path. If the min-heap is empty, then the given actor is not connected to any other actor. The program gives a warning and exits.
+
+
+
+**How we tested it**
+We first created our own input test files. These files are small and we know exactly who is whose closest actor. We runned the program on these files with different input actors, and the outputs match our expectation. 
+The test files we use are "test1.tsv" "test2.tsv" "test3.tsv", and the biggest one is "movie_casts.tsv".
+
+
+
+
+
